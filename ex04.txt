@@ -1,0 +1,8 @@
+The client sends a post request to the server to post the contents of the text area to /new_note.
+The server then redirects the client to /notes via GET request
+
+THis causes the client to perform 3 more GET requests for the CSS, Javascript, and the data.json file. 
+
+The server then runs the app.post method which creates a new note objects and adds/pushes the new note entry into the data.json file.
+
+The client reloads the notes page with the current list of notes as well as their new note added as requested.
