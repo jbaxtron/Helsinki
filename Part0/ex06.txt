@@ -1,0 +1,3 @@
+Clicking the submit button on the form no longer uses the default form behavior, and instead uses the onsubmit function in spa.js.
+
+This pushes the new note to data.json and redraws the notes_form area of the html page to include the new note. 

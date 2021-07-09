@@ -1,0 +1,6 @@
+The client sends an GET request to the server.
+
+The server responds with the spa HTML document file.
+This causes Main.css, and spa.js to be downloaded.
+
+THe page is loaded in the client with all changes/settings present in the html, Main.css and spa.js
