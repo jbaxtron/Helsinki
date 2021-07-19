@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+
 import './App.css';
 import React, {useState} from 'react';
 
@@ -24,36 +24,68 @@ const Button = (props) => {
 }
 
 
-const Results = ({text, count}) => {
+const Statistic = (props) => {
 
   return (
-    <p>{text} {count}</p>
+    <tr><td>{props.text}</td> <td>{props.clicks}</td></tr>
   )
+}
+
+const Statistics = ({text, clicks}) => {
+
+  const total = clicks.good + clicks.neutral + clicks.bad
+  const avg = (clicks.good - clicks.bad)/total
+  const pos = clicks.good/total
+if (clicks.good ===0 && clicks.neutral===0 && clicks.bad===0){
+  return (
+  <div>
+    <p>No feedback given</p>
+  </div>
+  )
+}else{
+  return (
+    <table>
+      <Header text='Statistics'/>
+      <Statistic text="good" clicks={clicks.good}/>
+      <Statistic text="neutral" clicks={clicks.neutral}/>
+      <Statistic text="bad" clicks={clicks.bad}/>
+      <Statistic text ="average" clicks={avg}/>
+      <Statistic text ="positive" clicks={pos}/>
+    </table>
+  )
+
+}
 }
 
 
 
 
 const App = () => {
-  const [good, setGood] = useState(0)
-  const [neutral, setNeutral] = useState(0)
-  const [bad, setBad] = useState(0)
+const [clicks, setClicks] = useState({
+  good : 0, neutral : 0, bad : 0
+}) 
 
-  const addGood = (value) => setGood(value)
-  const addNeutral = (value) => setNeutral(value)
-  const addBad = (value) => setBad(value)
+  const goodClick = () =>
+  setClicks({...clicks, good : clicks.good + 1})
+
+  const badClick = () =>
+  setClicks({...clicks, bad : clicks.bad + 1})
+
+  const neutralClick = () =>
+  setClicks({...clicks, neutral : clicks.neutral + 1})
+
   
+
 
   return (
     <div>
       <Header  text='Give Feedback'/>
-      <Button text="good" handleClick ={()=> addGood(good +1)}  />
-      <Button text="neutral" handleClick ={()=> addNeutral(neutral +1)}  />
-      <Button text="bad" handleClick ={()=> addBad(bad +1)}  />
-      <Header text='Statistics'/>
-      <Results   text="good" count={good}/>
-      <Results   text="neutral" count={neutral}/>
-      <Results   text="bad" count={bad}/>
+      <Button text="good" handleClick ={goodClick} />
+      <Button text="neutral" handleClick ={neutralClick}  />
+      <Button text="bad" handleClick ={badClick}  />
+      <Statistics clicks={clicks}/>
+
+
     </div>
   );
 }
