@@ -1,16 +1,6 @@
 {
   "persons": [
     {
-      "name": "Donkey Kong",
-      "number": "11515151",
-      "id": 5
-    },
-    {
-      "name": "King Shark",
-      "number": "1111211111",
-      "id": 7
-    },
-    {
       "name": "Jerry Smith",
       "number": "453616851",
       "id": 8
@@ -34,6 +24,66 @@
       "name": "Thor",
       "number": "I do like iPhones though",
       "id": 12
+    },
+    {
+      "name": "Bucky Barnes",
+      "number": "54253521",
+      "id": 13
+    },
+    {
+      "name": "Baron Mordo",
+      "number": "5425352155",
+      "id": 14
+    },
+    {
+      "name": "Dr Strange",
+      "number": "444456565",
+      "id": 15
+    },
+    {
+      "name": "Tony Stark",
+      "number": "684984968541",
+      "id": 16
+    },
+    {
+      "name": "Natasha Romanov",
+      "number": "6849849685415",
+      "id": 17
+    },
+    {
+      "name": "Loki",
+      "number": "34566578",
+      "id": 18
+    },
+    {
+      "name": "Thanos",
+      "number": "8989798",
+      "id": 19
+    },
+    {
+      "name": "Dormamu",
+      "number": "89897986",
+      "id": 20
+    },
+    {
+      "name": "Master Chief",
+      "number": "656548541",
+      "id": 21
+    },
+    {
+      "name": "Rick Sanchez",
+      "number": "6565485418",
+      "id": 22
+    },
+    {
+      "name": "Morty Smith",
+      "number": "65654854187",
+      "id": 23
+    },
+    {
+      "name": "The Doctor",
+      "number": "78456132",
+      "id": 24
     }
   ]
 }

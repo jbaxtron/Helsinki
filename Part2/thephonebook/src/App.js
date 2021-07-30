@@ -8,6 +8,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [message, setMessage] = useState(null)
   const updater = () => {
     personService
       .getFullList()
@@ -46,7 +47,20 @@ const App = () => {
         .updatePerson(pid, newObject)
         .then(returnedPerson =>
           setPersons(persons.map(person1 => person1.id !== personToUpd.id ? person1 : returnedPerson))
-        )}
+        )
+        .catch(()=>{setMessage(`${newObject.name} has already been deleted from the PhoneBook`);
+        setTimeout(() => {
+          setMessage(null)
+        },5000)})
+
+
+        setMessage(`${newPhone} has been added to the PhoneBook`)
+        setTimeout(() => {
+          setMessage(null)
+        },5000)
+        setNewName('')
+        setNewPhone('')
+      }
     } else {
 
       setPersons(persons.concat([{ name: newName, number: newPhone }]))
@@ -56,8 +70,14 @@ const App = () => {
         .then(returned => {
           setPersons(persons.concat(returned))
         })
+
+        setMessage(`${newName} has been added to the PhoneBook`)
+        setTimeout(() => {
+          setMessage(null)
+        },5000)
       setNewName('')
       setNewPhone('')
+      
     }
   }
 
@@ -111,6 +131,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Message message={message}/>
       <Filter readFilter={readFilter} />
       <h2>Add a new</h2>
       <PersonForm addName={addName} readInput={readInput} readPhone={readPhone} />
@@ -186,6 +207,18 @@ const DelButton = ({ delPerson, personId }) => {
     <button value={personId} onClick={delPerson}>Delete</button>
 
   )
+}
+
+const Message = ({message}) =>{
+if((message===null)){
+  return null
+}else {
+  return(
+    <div className='Message'>
+      {message}
+    </div>
+  )
+  }
 }
 
 export default App
