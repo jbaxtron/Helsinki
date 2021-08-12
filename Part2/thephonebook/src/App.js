@@ -1,6 +1,4 @@
-import axios from 'axios'
 import React, { useState, useEffect } from 'react'
-import person from './services/person.js'
 import personService from './services/person.js'
 
 const App = () => {
@@ -9,14 +7,7 @@ const App = () => {
   const [newPhone, setNewPhone] = useState('')
   const [newFilter, setNewFilter] = useState('')
   const [message, setMessage] = useState(null)
-  const updater = () => {
-    personService
-      .getFullList()
-      .then(response => {
-        setPersons(response)
-        console.log(persons)
-      })
-  }
+
 
 
 
@@ -27,59 +18,78 @@ const App = () => {
     const checkerP = persons.map(persons => persons.number)
     const addition = { name: newName, number: newPhone }
 
-    if (newName == '' || newPhone === '') {
+    if (newName === '' || newPhone === '') {
       return;
     }
 
-    else if (checker.includes(newName) && checkerP.includes(newPhone)) {
+    if (checker.includes(newName) && checkerP.includes(newPhone)) {
       window.alert(`${newName} is already added to the phonebook`)
 
       return;
-    } else if (checker.includes(newName) && !checkerP.includes(newPhone)) {
+
+    } 
+    if (checker.includes(newName) && !checkerP.includes(newPhone)) {
       const personToUpd = persons.find(person => person.name === newName)
       console.log('Name: ', personToUpd.name)
       const newObject = { ...personToUpd, number: newPhone }
       console.log(`New Object: ${newObject}`)
       const pid = personToUpd.id
 
-      if (window.confirm(`${newObject.name}, is already in the phone book, update number?`)){
+      if (window.confirm(`${newObject.name}, is already in the phone book, update number?`)) {
         personService
-        .updatePerson(pid, newObject)
-        .then(returnedPerson =>
-          setPersons(persons.map(person1 => person1.id !== personToUpd.id ? person1 : returnedPerson))
-        )
-        .catch(()=>{setMessage(`${newObject.name} has already been deleted from the PhoneBook`);
-        setTimeout(() => {
-          setMessage(null)
-        },5000)})
+          .updatePerson(pid, newObject)
+          .then(returnedPerson =>
+            setPersons(persons.map(person1 => person1.id !== personToUpd.id ? person1 : returnedPerson))
+          )
+          .catch(() => {
+            setMessage(`${newObject.name} has already been deleted from the PhoneBook`);
+            setTimeout(() => {
+              setMessage(null)
+            }, 5000)
+          })
 
 
         setMessage(`${newPhone} has been added to the PhoneBook`)
         setTimeout(() => {
           setMessage(null)
-        },5000)
+        }, 5000)
         setNewName('')
         setNewPhone('')
+        return;
       }
-    } else {
-
-      setPersons(persons.concat([{ name: newName, number: newPhone }]))
+    } 
 
       personService
         .addToList(addition)
-        .then(returned => {
-          setPersons(persons.concat(returned))
+        .then(response => {console.log('then', response)
+        if(response.status ===200){
+          setPersons(persons.concat([{ name: newName, number: newPhone }]))
+          setMessage(`${newName} has been added to the PhoneBook`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+          return;
+        }
+        })
+        .catch(error => {
+          console.log('catcherror' ,error.response.data)
+          const errormsg = (error.response.data)
+          setMessage(`${errormsg}`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+          return;
         })
 
-        setMessage(`${newName} has been added to the PhoneBook`)
-        setTimeout(() => {
-          setMessage(null)
-        },5000)
+      // setMessage(`${newName} has been added to the PhoneBook`)
+      // setTimeout(() => {
+      //   setMessage(null)
+      // }, 5000)
       setNewName('')
       setNewPhone('')
-      
+
     }
-  }
+  
 
   const readInput = (event) => {
     setNewName(event.target.value)
@@ -102,7 +112,7 @@ const App = () => {
 
 
     //This line gave me grief --v If the "return" is INSIDE the .find function it works, calling it on "found" as a function outside the function DOES NOT work. 
-    const found = persons.find(person1 => { return person1.id == pid });
+    const found = persons.find(person1 => { return person1.id === pid });
     console.log(found)
     const pName = found.name;
     console.log(pName)
@@ -123,15 +133,20 @@ const App = () => {
   }
 
   useEffect(() => {
-    updater()
+    personService
+    .getFullList()
+    .then(response => {
+      setPersons(response)
+      console.log(persons)
+    })
 
-  }, [JSON.stringify(personService.getFullList)])
+  }, [])
 
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Message message={message}/>
+      <Message message={message} />
       <Filter readFilter={readFilter} />
       <h2>Add a new</h2>
       <PersonForm addName={addName} readInput={readInput} readPhone={readPhone} />
@@ -141,6 +156,7 @@ const App = () => {
 
     </div>
   )
+  
 }
 
 const Filter = ({ readFilter }) => {
@@ -180,22 +196,21 @@ const Directory = ({ delPerson, persons, newFilter }) => {
 
   if (!newFilter === '') {
     return (
-      <div>
+      
 
-        {persons.map(person1 => <p key={person1.id}>{person1.name} {person1.number}
-          <DelButton delPerson={delPerson} key={person1.id} personId={person1.id} /></p>
-        )}
-      </div>
-
+        persons.map(person1 => <p key={person1.id}>{person1.name} {person1.number}
+          <DelButton  delPerson={delPerson} key={person1.id} personId={person1.id} /></p>)
+      
     )
+
   }
   else {
     return (
-      <div>
-        {fp.map(person1 => <p key={person1.id}>{person1.name} {person1.number}
-          <DelButton delPerson={delPerson} key={person1.id} personId={person1.id} /></p>
-        )}
-      </div>
+      
+        fp.map(person1 => <p key={person1.id}>{person1.name} {person1.number}
+          <DelButton  delPerson={delPerson} key={person1.id} personId={person1.id} /></p>
+        )
+      
     )
   }
 }
@@ -209,15 +224,15 @@ const DelButton = ({ delPerson, personId }) => {
   )
 }
 
-const Message = ({message}) =>{
-if((message===null)){
-  return null
-}else {
-  return(
-    <div className='Message'>
-      {message}
-    </div>
-  )
+const Message = ({ message }) => {
+  if ((message === null)) {
+    return null
+  } else {
+    return (
+      <div className='Message'>
+        {message}
+      </div>
+    )
   }
 }
 

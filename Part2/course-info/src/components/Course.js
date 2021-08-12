@@ -3,11 +3,13 @@ import React from 'react'
 
 const Course = ({course}) => {
 
-  
-
     return(
       <div>
-      {course.map((course)=><div key={course.id}> <Header name={course.name} /> <Content courses={course.parts} /> </div>)}
+      {course.map((course)=>
+        <div key={course.id}> 
+          <Header name={course.name} /> 
+          <Content courses={course.parts} /> 
+        </div>)}
       </div>
     )
   }
